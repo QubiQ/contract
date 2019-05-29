@@ -21,6 +21,7 @@
                         <field colspan="2" name="discount" groups="base.group_no_one"/>
                     </group>
                     <group col="4">
+                        <field colspan="2" name="analytic_account_id"/>
                         <field colspan="2" name="is_auto_renew"/>
                         <field colspan="2" name="is_canceled" invisible="1"/>
                     </group>

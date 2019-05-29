@@ -106,6 +106,10 @@ class ContractLine(models.Model):
         readonly=True,
         default=True,
     )
+    analytic_account_id = fields.Many2one(
+        comodel_name='account.analytic.account',
+        string="Analytic account",
+    )
 
     @api.multi
     @api.depends(
@@ -515,10 +519,13 @@ class ContractLine(models.Model):
         invoice_line_vals = invoice_line._convert_to_write(invoice_line._cache)
         # Insert markers
         name = self._insert_markers(dates[0], dates[1])
+        analytic_account = (
+            self.analytic_account_id.id if self.analytic_account_id
+            else self.contract_id.analytic_account_id.id)
         invoice_line_vals.update(
             {
                 'name': name,
-                'account_analytic_id': self.contract_id.analytic_account_id.id,
+                'account_analytic_id': analytic_account,
                 'price_unit': self.price_unit,
             }
         )

@@ -79,6 +79,7 @@
                 <field name="sequence" widget="handle"/>
                 <field name="product_id"/>
                 <field name="name"/>
+                <field name="analytic_account_id"/>
                 <field name="quantity"/>
                 <field name="uom_id"/>
                 <field name="automatic_price"/>
