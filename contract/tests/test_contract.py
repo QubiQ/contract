@@ -158,6 +158,43 @@ class TestContractBase(common.SavepointCase):
             }
         )
 
+        cls.contract4 = cls.env["contract.contract"].create(
+            {
+                "name": "Test Contract 4",
+                "partner_id": cls.partner.id,
+                "pricelist_id": cls.partner.property_product_pricelist.id,
+                "line_recurrence": True,
+                "contract_type": "sale",
+                "recurring_interval": 1,
+                "recurring_rule_type": "monthly",
+                "date_start": "2018-02-15",
+                "contract_line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "product_id": False,
+                            "name": "Services from #START# to #END#",
+                            "quantity": 1,
+                            "price_unit": 100,
+                            "date_start": '2020-01-01'
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "product_id": False,
+                            "name": "Line",
+                            "quantity": 1,
+                            "price_unit": 120,
+                            "date_start": '2020-04-01'
+                        },
+                    ),
+                ],
+            }
+        )
+
 
 class TestContract(TestContractBase):
     def _add_template_line(self, overrides=None):
@@ -188,6 +225,7 @@ class TestContract(TestContractBase):
         self.acct_line.refresh()
         self.assertEqual(self.acct_line.price_unit, 10)
 
+
     def test_contract(self):
         self.assertEqual(self.contract.recurring_next_date, to_date("2018-01-15"))
         self.assertAlmostEqual(self.acct_line.price_subtotal, 50.0)
@@ -203,6 +241,7 @@ class TestContract(TestContractBase):
         self.assertTrue(self.inv_line.tax_ids)
         self.assertAlmostEqual(self.inv_line.price_subtotal, 50.0)
         self.assertEqual(self.contract.user_id, self.invoice_monthly.user_id)
+
 
     def test_contract_level_recurrence(self):
         self.contract3.recurring_create_invoice()
